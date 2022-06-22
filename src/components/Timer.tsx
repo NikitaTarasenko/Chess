@@ -7,45 +7,56 @@ interface TimerProps {
   restart: () => void;
   setfisrtMove: (status: boolean) => void;
   fisrtMoveDone: boolean;
-  victory : Colors | null;
-  setVictory : (vinner: Colors | null) => void;
+  victory: Colors | null;
+  victoryHandler: (vinner: Colors | null) => void;
 }
-const Timer: React.FC<TimerProps> = ({ currentPlayer, restart, setfisrtMove, fisrtMoveDone, victory, setVictory }) => {
-  const [blackTime, setBlackTime] = useState(300);
-  const [whiteTime, setWhiteTime] = useState(300);
+const Timer: React.FC<TimerProps> = ({
+  currentPlayer,
+  restart,
+  setfisrtMove,
+  fisrtMoveDone,
+  victory,
+  victoryHandler,
+}) => {
+  let time = 300;
+  const [blackTime, setBlackTime] = useState(time);
+  const [whiteTime, setWhiteTime] = useState(time);
   const timer = useRef<null | ReturnType<typeof setInterval>>(null);
   const [pause, setPause] = useState(false);
+  const [vinner, setVinner] = useState(victory);
 
   useEffect(() => {
-    console.log("bag : " + fisrtMoveDone);
     if (fisrtMoveDone) {
-      console.log("first");
+      // console.log("first");
       startTimer();
     }
   }, [currentPlayer]);
 
   useEffect(() => {
-    console.log("current vic : " + victory + " and FM" + fisrtMoveDone);
+    setVinner(null);
+  }, [fisrtMoveDone]);
 
-    if (victory !== null && fisrtMoveDone) {
+  useEffect(() => {
+    // console.log("current vic : " + vinner + " and FM" + fisrtMoveDone);
+    // console.log("cur vinner : " + vinner);
+
+    victoryHandler(vinner);
+
+    if (vinner !== null && fisrtMoveDone) {
       console.log("restarted");
       if (timer.current !== null) {
         clearInterval(timer.current);
       }
       handleRestart();
     }
-  }, [victory]);
+  }, [vinner]);
 
   function startTimer() {
-    console.log("started Timer");
-    console.log("tmCur  == " + timer.current);
     if (timer.current) {
       clearInterval(timer.current);
     }
     if (fisrtMoveDone) {
-      console.log("shit is working");
       const callback = currentPlayer?.color === Colors.WHITE ? decrementWhiteTimer : decrementBlackTimer;
-
       timer.current = setInterval(callback, 1000);
     }
   }
@@ -56,12 +67,10 @@ const Timer: React.FC<TimerProps> = ({ currentPlayer, restart, setfisrtMove, fis
     startTimer();
   }
   function decrementBlackTimer() {
-    console.log("tmCur222  == " + timer.current);
     setBlackTime((prev) => {
       if (prev === 0) {
-        alert(" WHITE won !");
-        setVictory(Colors.WHITE);
-
+        setVinner(Colors.WHITE);
+        // alert(" WHITE won !");
         return 0;
       } else {
         return prev - 1;
@@ -72,21 +81,20 @@ const Timer: React.FC<TimerProps> = ({ currentPlayer, restart, setfisrtMove, fis
   function decrementWhiteTimer() {
     setWhiteTime((prev) => {
       if (prev === 0) {
-        alert("  BLACK won !");
-        setVictory(Colors.BLACK);
+        // alert("  BLACK won !");
+        setVinner(Colors.BLACK);
 
         return 0;
       } else {
-        console.log(" decW -1");
         return prev - 1;
       }
     });
   }
 
   const handleRestart = () => {
-    setWhiteTime(300);
-    setBlackTime(300);
-    setVictory(null);
+    setWhiteTime(time);
+    setBlackTime(time);
+    //  setVinner(null);
     setfisrtMove(false);
     restart();
     if (timer.current !== null) {
@@ -96,7 +104,6 @@ const Timer: React.FC<TimerProps> = ({ currentPlayer, restart, setfisrtMove, fis
 
   const handlePause = () => {
     setPause(!pause);
-    console.log("pauseee" + pause + "timerC =" + timer.current);
   };
 
   return (
