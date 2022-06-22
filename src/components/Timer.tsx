@@ -11,8 +11,8 @@ interface TimerProps {
   setVictory : (vinner: Colors | null) => void;
 }
 const Timer: React.FC<TimerProps> = ({ currentPlayer, restart, setfisrtMove, fisrtMoveDone, victory, setVictory }) => {
-  const [blackTime, setBlackTime] = useState(10);
-  const [whiteTime, setWhiteTime] = useState(10);
+  const [blackTime, setBlackTime] = useState(300);
+  const [whiteTime, setWhiteTime] = useState(300);
   const timer = useRef<null | ReturnType<typeof setInterval>>(null);
   const [pause, setPause] = useState(false);
 
@@ -84,8 +84,8 @@ const Timer: React.FC<TimerProps> = ({ currentPlayer, restart, setfisrtMove, fis
   }
 
   const handleRestart = () => {
-    setWhiteTime(10);
-    setBlackTime(10);
+    setWhiteTime(300);
+    setBlackTime(300);
     setVictory(null);
     setfisrtMove(false);
     restart();
