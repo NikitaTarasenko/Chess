@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import BoardComponent from "./components/BoardComponent";
 import LostFigures from "./components/LostFigures";
+import Modall from "./components/Modall";
 import Timer from "./components/Timer";
 import { Board } from "./models/Board";
 import { Colors } from "./models/Colors";
@@ -14,10 +15,17 @@ const App = () => {
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
   const [fisrtMoveDone, setFirstMoveDone] = useState(false);
   const [victory, setVictory] = useState<Colors | null>(null);
+  const [modalShow, setModalShow] = useState(false);
 
   useEffect(() => {
     restart();
   }, []);
+
+  useEffect(() => {
+    if (victory !== null) {
+      setModalShow(true);
+    }
+  }, [victory]);
 
   function restart() {
     const newBoard = new Board();
@@ -35,6 +43,9 @@ const App = () => {
   function firstMoveHandle(status: boolean) {
     setFirstMoveDone(status);
   }
+  const victoryHandler = (value: Colors | null) => {
+    setVictory(value);
+  };
 
   return (
     <div className="app">
@@ -44,7 +55,7 @@ const App = () => {
         setfisrtMove={firstMoveHandle}
         fisrtMoveDone={fisrtMoveDone}
         victory={victory}
-        setVictory={setVictory}
+        victoryHandler={victoryHandler}
       />
       <BoardComponent
         board={board}
@@ -57,6 +68,7 @@ const App = () => {
         <LostFigures title="black figures" figures={board.lostBlackFigures} />
         <LostFigures title="white figures" figures={board.lostWhiteFigures} />
       </div>
+      <Modall modal={modalShow} setModalShow={setModalShow} vinner={victory} victoryHandler={victoryHandler} />
     </div>
   );
 };
