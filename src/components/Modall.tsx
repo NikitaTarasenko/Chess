@@ -15,7 +15,6 @@ const Modall: React.FC<ModalProps> = ({ modal, setModalShow, vinner, victoryHand
 
   useEffect(() => {
     if (vinner !== null) {
-      console.log("bugfixer");
       setWinner(vinner);
     }
   }, [vinner]);

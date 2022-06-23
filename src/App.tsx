@@ -63,6 +63,7 @@ const App = () => {
         currentPlayer={currentPlayer}
         swapPlayer={swapPlayer}
         setfisrtMove={firstMoveHandle}
+        victoryHandler = {victoryHandler}
       ></BoardComponent>
       <div>
         <LostFigures title="black figures" figures={board.lostBlackFigures} />

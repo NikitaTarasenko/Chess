@@ -1,6 +1,6 @@
 import { Board } from "./Board";
 import { Colors } from "./Colors";
-import { Figure } from "./figures/Figure";
+import { Figure, FigureNames } from "./figures/Figure";
 
 export class Cell {
   readonly x: number;
@@ -11,6 +11,7 @@ export class Cell {
   available: boolean;
   id: number;
 
+
   constructor(board: Board, x: number, y: number, color: Colors, figure: Figure | null) {
     this.x = x;
     this.y = y;
@@ -19,6 +20,7 @@ export class Cell {
     this.board = board;
     this.available = false;
     this.id = Math.random();
+ 
   }
 
   isEmpty(): boolean {
@@ -90,6 +92,7 @@ export class Cell {
   }
 
   moveFigure(target: Cell) {
+    // console.log(target.figure?.name);
     if (this.figure && this.figure?.canMove(target)) {
       this.figure.moveFigure(target);
       if (target.figure) {
